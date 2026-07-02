@@ -72,8 +72,11 @@ def build_ensemble(seed=0):
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--data", required=True, help="path to train/raw chunk JSON dir")
-    ap.add_argument("--payload-view", required=True,
-                    help="path to poker44/validator/payload_view.py (the sanitizer)")
+    ap.add_argument("--payload-view",
+                    default=os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                                         "..", "poker44", "validator", "payload_view.py"),
+                    help="path to poker44/validator/payload_view.py (the sanitizer); "
+                         "defaults to this repo's own copy so daily_update can retrain")
     args = ap.parse_args()
 
     sanitize_chunk = _load_sanitizer(args.payload_view)
