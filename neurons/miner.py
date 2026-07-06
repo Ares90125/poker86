@@ -49,9 +49,9 @@ class Miner(BaseMinerNeuron):
             repo_root=repo_root,
             implementation_files=implementation_files,
             defaults={
-                "model_name": "poker73-histgbm-v3",
-                "model_version": "3",
-                "framework": "scikit-learn-histgbm",
+                "model_name": "poker86-sani-c2",
+                "model_version": "5",
+                "framework": "scikit-learn-ensemble",
                 "license": "MIT",
                 "repo_url": "",
                 "notes": "Gradient-boosted-trees bot detector over behavioral features (poker44_model/).",
