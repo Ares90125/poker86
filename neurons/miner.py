@@ -49,7 +49,7 @@ class Miner(BaseMinerNeuron):
             repo_root=repo_root,
             implementation_files=implementation_files,
             defaults={
-                "model_name": "poker86-ens",
+                "model_name": "poker86-v1",
                 "model_version": "6",
                 "framework": "lightgbm+sklearn-ensemble",
                 "license": "MIT",
