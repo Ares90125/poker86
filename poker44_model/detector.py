@@ -20,11 +20,11 @@ Members (all over the identical 180-dim FEATURE_NAMES row)
                +1/-1 ONLY for features whose per-DATE Spearman(feature,label) sign
                is stable across >=70% of dates AND |mean rho| >= 0.05 (else 0).
                The OOD-transfer regularizer.
-  3. MLP    -- PCA(56) -> MLP bag on the standardized feature view; architecturally
+  3. MLP    -- PCA(52) -> MLP(72,) bag on the standardized feature view; architecturally
                decorrelated from the tree members.
 
 Fusion is calibration-free: each member's WITHIN-BATCH rank (argsort/argsort/(n-1))
-is averaged with fixed weights (0.35, 0.30, 0.35), so no member's OOD score-scale
+is averaged with fixed weights (0.40, 0.25, 0.35), so no member's OOD score-scale
 can distort the blend. The fused rank is the movable ordering that drives the 65%
 RANK block.
 
@@ -38,16 +38,15 @@ are set purely by the fused rank.
 
 Two corrections vs the previous version, both measured on live captures:
   * The isotonic map is GONE. It is monotone but NON-INJECTIVE, so it merged the
-    fused rank into ~26 distinct levels per 100-chunk window and put the
+    fused rank into ~22 distinct levels per 100-chunk window and put the
     recall@FPR<=0.05 boundary inside a tie group. The old claim that the transform
-    was "monotone, so AP/recall are set purely by the fused rank" was FALSE:
-    monotone preserves order only if injective.
+    was "monotone, so AP/recall are set purely by the fused rank" was FALSE.
   * FLOOR is 0.10, not 0.02. The old claim of "zero hard-zeros" was ALSO FALSE:
     FLOOR guarantees that k chunks CROSS 0.5, not that any of them is a BOT.
     scoring.py zeroes the WHOLE round when no true bot crosses, and with k=2 the
     crossing set was decided by array index inside the isotonic tie plateau
-    (index-arbitrary in 17-18 of 18 live windows) -- which is what produced
-    uid212 R3 = 0.000, uid236 R2 = 0.000, and uid236's ~0.077 epoch.
+    (index-arbitrary in 17-18 of 18 live windows) -- which produced uid212 R3 =
+    0.000, uid236 R2 = 0.000, and uid236's ~0.077 epoch.
 k = ceil(FLOOR*n) chunks cross 0.5; at n=100 that is 10, matching the 10% FPR
 budget where threshold_sanity_quality is still 1.0.
 
